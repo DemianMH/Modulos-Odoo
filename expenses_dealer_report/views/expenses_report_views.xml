@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_expense_dealer_native_list" model="ir.ui.view">
+        <field name="name">hr.expense.dealer.list</field>
+        <field name="model">hr.expense</field>
+        <field name="arch" type="xml">
+            <list string="Gastos Dealer" default_order="total_amount desc">
+                <field name="date" string="Fecha"/>
+                <field name="name" string="Concepto / Descripción"/>
+                <field name="product_id" string="Categoría"/>
+                <field name="total_amount" sum="Total Gastos"/>
+                <field name="state" widget="badge" string="Estado"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_expense_dealer_native_graph" model="ir.ui.view">
+        <field name="name">hr.expense.dealer.graph</field>
+        <field name="model">hr.expense</field>
+        <field name="arch" type="xml">
+            <graph string="Distribución de Gastos por Categoría" type="pie">
+                <field name="product_id"/>
+                <field name="total_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_expense_dealer_native_report" model="ir.actions.act_window">
+        <field name="name">Gastos Dealer</field>
+        <field name="res_model">hr.expense</field>
+        <field name="view_mode">list,graph</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_expense_dealer_native_list')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_expense_dealer_native_graph')})]"/>
+    </record>
+
+    <menuitem id="menu_expense_dealer_native_report"
+              name="Gastos Dealer"
+              parent="hr_expense.menu_hr_expense_report"
+              action="action_expense_dealer_native_report"
+              sequence="60"/>
+</odoo>
