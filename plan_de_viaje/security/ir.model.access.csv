@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_plan_viaje_user,plan.viaje.user,model_plan_viaje,group_plan_viaje_user,1,1,1,1
-access_plan_viaje_manager,plan.viaje.manager,model_plan_viaje,group_plan_viaje_manager,1,1,1,1
