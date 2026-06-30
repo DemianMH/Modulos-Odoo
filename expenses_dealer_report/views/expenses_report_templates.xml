@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_expenses_dealer_pdf" model="ir.actions.report">
+        <field name="name">Imprimir PDF Gastos Dealer</field>
+        <field name="model">hr.expense</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">expenses_dealer_report.report_expenses_dealer_xml</field>
+        <field name="report_file">expenses_dealer_report.report_expenses_dealer_xml</field>
+        <field name="print_report_name">'Analisis_de_Gastos_Dealer'</field>
+        <field name="binding_model_id" ref="hr_expense.model_hr_expense"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_expenses_dealer_xml">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page" style="font-family: 'Arial', sans-serif; color: #2C3E50; padding: 10px;">
+                    
+                    <div class="text-center" style="margin-bottom: 35px; border-bottom: 3px solid #1A365D; padding-bottom: 12px;">
+                        <h2 style="color: #1A365D; font-weight: bold; margin-bottom: 4px;">ANÁLISIS DE GASTOS DEALER</h2>
+                        <h5 style="color: #7F8C8D; text-transform: uppercase; font-weight: normal; letter-spacing: 1px;">
+                            Distribución por Pestaña y Top 15 de Importes
+                        </h5>
+                    </div>
+
+                    <div style="margin-bottom: 45px; page-break-inside: avoid;">
+                        <h4 style="color: #1A365D; font-weight: bold; border-left: 5px solid #1A365D; padding-left: 10px; margin-bottom: 15px;">
+                            DISTRIBUCIÓN DE GASTOS POR PESTAÑA (CATEGORÍA)
+                        </h4>
+                        <table class="table table-sm" style="width: 100%; border: 1px solid #BDC3C7; border-collapse: collapse;">
+                            <thead style="background-color: #1A365D; color: #ffffff;">
+                                <tr>
+                                    <th style="padding: 9px; text-align: left; border: 1px solid #BDC3C7;">CATEGORÍA</th>
+                                    <th style="padding: 9px; text-align: right; width: 25%; border: 1px solid #BDC3C7;">IMPORTE</th>
+                                    <th style="padding: 9px; text-align: right; width: 20%; border: 1px solid #BDC3C7;">% DEL TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="analysis_lines" t-as="line">
+                                    <tr style="border-bottom: 1px solid #ECF0F1;">
+                                        <td style="padding: 7px; font-weight: bold; border: 1px solid #BDC3C7;"><t t-out="line['categoria']"/></td>
+                                        <td style="padding: 7px; text-align: right; border: 1px solid #BDC3C7;">
+                                            <t t-out="line['importe']" t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'/>
+                                        </td>
+                                        <td style="padding: 7px; text-align: right; font-weight: bold; color: #2980B9; border: 1px solid #BDC3C7;">
+                                            <t t-out="'%.1f' % line['porcentaje']"/>%
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr style="background-color: #EAEDF1; font-weight: bold; border-top: 2.5px solid #1A365D;">
+                                    <td style="padding: 10px; border: 1px solid #BDC3C7; color: #1A365D;">TOTAL GENERAL</td>
+                                    <td style="padding: 10px; text-align: right; border: 1px solid #BDC3C7; color: #1A365D;">
+                                        <t t-out="total_general" t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'/>
+                                    </td>
+                                    <td style="padding: 10px; text-align: right; border: 1px solid #BDC3C7; color: #1A365D;">100.0%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="page-break-before: always; margin-bottom: 20px; page-break-inside: avoid;">
+                        <h4 style="color: #2C3E50; font-weight: bold; border-left: 5px solid #2C3E50; padding-left: 10px; margin-bottom: 15px;">
+                            TOP 15 GASTOS MÁS GRANDES POR IMPORTE
+                        </h4>
+                        <table class="table table-sm" style="width: 100%; border: 1px solid #BDC3C7; border-collapse: collapse;">
+                            <thead style="background-color: #34495E; color: #ffffff;">
+                                <tr>
+                                    <th style="padding: 8px; text-align: center; width: 8%; border: 1px solid #BDC3C7;">#</th>
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #BDC3C7;">CONCEPTO</th>
+                                    <th style="padding: 8px; text-align: left; width: 30%; border: 1px solid #BDC3C7;">PESTAÑA / CATEGORÍA</th>
+                                    <th style="padding: 8px; text-align: right; width: 22%; border: 1px solid #BDC3C7;">IMPORTE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <t t-foreach="top_15" t-as="expense">
+                                    <tr style="border-bottom: 1px solid #ECF0F1;">
+                                        <td style="padding: 6px; text-align: center; color: #7F8C8D; border: 1px solid #BDC3C7;"><t t-out="counter"/></td>
+                                        <td style="padding: 6px; border: 1px solid #BDC3C7;"><t t-out="expense.name"/></td>
+                                        <td style="padding: 6px; color: #7F8C8D; border: 1px solid #BDC3C7;"><t t-out="expense.product_id.name"/></td>
+                                        <td style="padding: 6px; text-align: right; font-weight: bold; border: 1px solid #BDC3C7; color: #C0392B;">
+                                            <t t-out="expense.total_amount" t-options='{"widget": "monetary", "display_currency": res_company.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="counter" t-value="counter + 1"/>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="page-break-before: always; padding-top: 15px;">
+                        <h4 style="color: #1A365D; font-weight: bold; border-left: 5px solid #1A365D; padding-left: 10px; margin-bottom: 25px;">
+                            REPRESENTACIÓN GRÁFICA DE DISTRIBUCIÓN
+                        </h4>
+                        
+                        <div style="width: 100%; display: table; margin-top: 20px;">
+                            <div style="display: table-cell; width: 45%; text-align: center; vertical-align: middle;">
+                                <svg width="320" height="320" viewBox="0 0 320 320">
+                                    <t t-foreach="analysis_lines" t-as="line">
+                                        <t t-if="line.get('svg_path')">
+                                            <path t-att-d="line['svg_path']" t-att-fill="line['color']" stroke="#ffffff" stroke-width="2"/>
+                                        </t>
+                                    </t>
+                                </svg>
+                            </div>
+                            
+                            <div style="display: table-cell; width: 55%; vertical-align: top; padding-left: 30px;">
+                                <h5 style="color: #34495E; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #BDC3C7; padding-bottom: 5px;">
+                                    LEYENDA DE PESTAÑAS
+                                </h5>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tbody>
+                                        <t t-foreach="analysis_lines" t-as="line">
+                                            <tr style="border-bottom: 1px solid #F2F4F4;">
+                                                <td style="width: 25px; padding: 6px 0; vertical-align: middle;">
+                                                    <div t-attf-style="width: 14px; height: 14px; background-color: #{line.get('color', '#000')}; border-radius: 3px;"/>
+                                                </td>
+                                                <td style="padding: 6px; font-size: 12px; font-weight: bold; color: #2C3E50;">
+                                                    <t t-out="line['categoria']"/>
+                                                </td>
+                                                <td style="padding: 6px; text-align: right; font-size: 12px; font-weight: bold; color: #2980B9;">
+                                                    <t t-out="'%.1f' % line['porcentaje']"/>%
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

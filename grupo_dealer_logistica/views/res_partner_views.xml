@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_grupo_dealer" model="ir.ui.view">
+        <field name="name">res.partner.form.grupo.dealer</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Logística Grupo Dealer" name="grupo_dealer_logistica">
+                    <group>
+                        <field name="x_paqueteria_id"/>
+                        <field name="x_pago_paqueteria"/>
+                        <field name="x_condicion_entrega"/>
+                        <field name="x_etiquetado_especial"/>
+                        <field name="x_plazo_pago_dias"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

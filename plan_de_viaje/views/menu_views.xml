@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_plan_viaje_root" name="Planes de Viaje" sequence="40" web_icon="plan_de_viaje,static/description/icon.png"/>
+    
+    <menuitem id="menu_plan_viaje_operacion" name="Operaciones" parent="menu_plan_viaje_root" sequence="10"/>
+    <menuitem id="menu_plan_viaje_action" name="Todos los Viajes" parent="menu_plan_viaje_operacion" action="action_plan_viaje" sequence="10"/>
+</odoo>

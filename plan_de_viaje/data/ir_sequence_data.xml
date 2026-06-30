@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_plan_viaje" model="ir.sequence">
+            <field name="name">Secuencia Plan de Viaje</field>
+            <field name="code">plan.viaje</field>
+            <field name="prefix">VIAJE/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>
